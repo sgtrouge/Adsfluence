@@ -7,14 +7,16 @@ from textwrap import TextWrapper
 
 import tweepy
 
+# Keywords
+track_Michigan = ['GoBlue', 'Ann Arbor', 'UMich', 'Michigan Wolverines', 'BigHouse', 'University of Michigan', 'Duderstadt', 'Yost arena', 'Crisler Center', 'Zingermann']
 
+# Features: user_id, source_id if RT, content, location, # of RT, # of favorites, # of followers, # of followees, # timestamp, tweet ID
 class StreamWatcherListener(tweepy.StreamListener):
 
     status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
 
     def on_status(self, status):
         try:
-            print status
             print self.status_wrapper.fill(status.text)
             print '\n %s  %s  via %s\n' % (status.author.screen_name, status.created_at, status.source)
         except:
@@ -77,6 +79,7 @@ def main():
         else:
             track_list = None
         print follow_list
+        track_list = track_Michigan
         print track_list
         stream.filter(follow_list, track_list, languages=['en'])
 
