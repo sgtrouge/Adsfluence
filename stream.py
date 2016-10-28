@@ -33,10 +33,10 @@ class StreamWatcherListener(tweepy.StreamListener):
 
 
 def main():
-    access_token = "308609794-UnsFrbl4fcBQsOzbG5sqliFMKowhOlzRmLHVeBdp"
-    access_token_secret = "BwjfaD1QgiF0wEzMdyBDsLLEnYXeXLpLqgVcru4oU9QLB"
-    consumer_key = "Tzui94xupQIdChpAD7shh6DVo"
-    consumer_secret = "uMRrB7tH7YHgANboYa3wB1U0HHGm2g51j9Aj7QG9XVZnLgRlv9"
+    access_token = ""
+    access_token_secret = ""
+    consumer_key = ""
+    consumer_secret = ""
 
     auth = tweepy.auth.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
