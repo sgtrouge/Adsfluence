@@ -1,16 +1,34 @@
 #!/usr/bin/env python
-
+# -*- coding: UTF-8 -*-
 # https://www.dataquest.io/blog/streaming-data-python/
 import time
+import tweepy
+import json
+import csv
 from getpass import getpass
 from textwrap import TextWrapper
 
-import tweepy
-
 # Keywords
 track_Michigan = ['GoBlue', 'Ann Arbor', 'UMich', 'Michigan Wolverines', 'BigHouse', 'University of Michigan', 'Duderstadt', 'Yost arena', 'Crisler Center', 'Zingermann']
+import csv
+w = open("result.csv", "w")
+# extract a row of info into csv from status
+# Features: user_id, source_id if RT, content, location of user, # of RT, # of followers, # of followees, # timestamp, tweet ID
+def writeAsJSON(status):
+    rowInfo = {}
+    rowInfo['content'] = status.text
+    rowInfo['user_id'] = status.author.id
+    rowInfo['user_follower_count'] = status.author.followers_count
+    rowInfo['user_location'] = status.author.location
+    rowInfo['retweet_count'] = status.retweet_count
+    rowInfo['timestamp'] = status.timestamp_ms
+    if status.retweeted_status:
+        rowInfo['retweeted_author_id'] = status.retweeted_status.author.id
+        rowInfo['retweeted_author_followers_count'] = status.retweeted_status.author.followers_count
+        rowInfo['retweeted_author_location'] = status.retweeted_status.author.location
+        rowInfo['retweeted_favorite_count'] = status.retweeted_status.favorite_count
+    json.dump(rowInfo, w)
 
-# Features: user_id, source_id if RT, content, location, # of RT, # of favorites, # of followers, # of followees, # timestamp, tweet ID
 class StreamWatcherListener(tweepy.StreamListener):
 
     status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
@@ -18,6 +36,8 @@ class StreamWatcherListener(tweepy.StreamListener):
     def on_status(self, status):
         try:
             print self.status_wrapper.fill(status.text)
+            #json.dump(rowInfo, w)
+            writeAsJSON(status)
             print '\n %s  %s  via %s\n' % (status.author.screen_name, status.created_at, status.source)
         except:
             # Catch any unicode errors while printing to console
@@ -54,34 +74,9 @@ def main():
         stream.sample()
 
     elif mode == 'filter':
-        follow_list = raw_input('Users to follow (comma separated): ').strip()
-        track_list = raw_input('Keywords to track (comma seperated): ').strip()
-        if follow_list:
-            follow_list = [u for u in follow_list.split(',')]
-            userid_list = []
-            username_list = []
-            
-            for user in follow_list:
-                if user.isdigit():
-                    userid_list.append(user)
-                else:
-                    username_list.append(user)
-            
-            for username in username_list:
-                user = tweepy.API().get_user(username)
-                userid_list.append(user.id)
-            
-            follow_list = userid_list
-        else:
-            follow_list = None
-        if track_list:
-            track_list = [k for k in track_list.split(',')]
-        else:
-            track_list = None
-        print follow_list
         track_list = track_Michigan
         print track_list
-        stream.filter(follow_list, track_list, languages=['en'])
+        stream.filter([], track_list, languages=['en'])
 
 
 if __name__ == '__main__':
@@ -89,3 +84,4 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         print '\nGoodbye!'
+        w.close()
