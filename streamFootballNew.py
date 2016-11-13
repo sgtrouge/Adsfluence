@@ -9,18 +9,50 @@ from getpass import getpass
 from textwrap import TextWrapper
 
 # Keywords
-# track_Michigan = ['GoBlue', 'Ann Arbor', 'UMich', 'Michigan Wolverines', 'BigHouse', 'University of Michigan', 'Duderstadt', 'Yost arena', 'Crisler Center']
-track_election = ['election']
+track_Michigan = ['GoBlue', 'Ann Arbor', 'UMich', 'Michigan Wolverines', 'BigHouse', 'University of Michigan', 'Duderstadt', 'Yost arena', 'Crisler Center']
 import csv
-w = open("election.txt", "r")
+w = open("newFootball.txt", "r")
 initContent = w.read()
 count = len(initContent.split('}{'))
 w.close()
-w = open("election.txt", "a")
+w = open("newFootball.txt", "a")
+
+
+# Read through old user list to ensure we only filter
+# tweets of existing user
+all_user_id = {}
+def readOldUser(filename):
+    f = open(filename, 'r')
+    global all_user_id
+    data = f.read()
+    splits = data.split('}{')
+    splits[0] = splits[0][1:]
+    # For some reason the last one isn't built correctly, need to append ]]
+    splits[-1] = splits[-1][:-1] +']]'
+    count = 0
+    for js in splits:
+        jss = '{' + js + '}'
+        try:
+            tweet_map = json.loads(jss)
+            user = tweet_map["user_id"]
+            all_user_id[int(user)] = True
+            if "retweeted_author_id" in tweet_map:
+                retweeted_author_id = tweet_map['retweeted_author_id']
+                all_user_id[int(retweeted_author_id)] = True
+            count += 1
+        except:
+            pass
+    print len(all_user_id)
+    f.close()
 
 # extract a row of info into csv from status
 # Features: user_id, source_id if RT, content, location of user, # of RT, # of followers, # of followees, # timestamp, tweet ID
 def writeAsJSON(status):
+    global all_user_id
+    global count
+    print count
+    if int(status.author.id) not in all_user_id:
+        return
     rowInfo = {}
     rowInfo['content'] = status.text
     rowInfo['user_id'] = status.author.id
@@ -29,12 +61,13 @@ def writeAsJSON(status):
     rowInfo['retweet_count'] = status.retweet_count
     rowInfo['timestamp'] = status.timestamp_ms
     if hasattr(status, 'retweeted_status'):
+        if int(status.retweeted_status.author.id) not in all_user_id:
+                return
         rowInfo['retweeted_author_id'] = status.retweeted_status.author.id
         rowInfo['retweeted_author_followers_count'] = status.retweeted_status.author.followers_count
         rowInfo['retweeted_author_location'] = status.retweeted_status.author.location
         rowInfo['retweeted_favorite_count'] = status.retweeted_status.favorite_count
     global w
-    global count
     count = count + 1
     print count
     json.dump(rowInfo, w)
@@ -62,6 +95,7 @@ class StreamWatcherListener(tweepy.StreamListener):
 
 
 def main():
+    readOldUser('resultBackup.txt')
     access_token = "308609794-UnsFrbl4fcBQsOzbG5sqliFMKowhOlzRmLHVeBdp"
     access_token_secret = "BwjfaD1QgiF0wEzMdyBDsLLEnYXeXLpLqgVcru4oU9QLB"
     consumer_key = "Tzui94xupQIdChpAD7shh6DVo"
@@ -83,7 +117,7 @@ def main():
         stream.sample()
 
     elif mode == 'filter':
-        track_list = track_election
+        track_list = track_Michigan
         print track_list
         stream.filter([], track_list, languages=['en'])
 
