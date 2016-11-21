@@ -11,11 +11,11 @@ from textwrap import TextWrapper
 # Keywords
 track_Michigan = ['GoBlue', 'Ann Arbor', 'UMich', 'Michigan Wolverines', 'BigHouse', 'University of Michigan', 'Duderstadt', 'Yost arena', 'Crisler Center']
 import csv
-w = open("newFootball.txt", "r")
+w = open("newFootball3rd.txt", "r")
 initContent = w.read()
 count = len(initContent.split('}{'))
 w.close()
-w = open("newFootball.txt", "a")
+w = open("newFootball3rd.txt", "a")
 
 
 # Read through old user list to ensure we only filter

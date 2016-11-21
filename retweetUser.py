@@ -29,7 +29,6 @@ def add_file_data(filename):
 	user_friends_map = {}
 	for js in splits:
 		jss = '{' + js + '}'
-		print jss
 		try:
 			tweet_map = json.loads(jss)
 			user = tweet_map["user_id"]

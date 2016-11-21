@@ -24,4 +24,5 @@ for i in range(int(n)):
 		G.add_edge(splits[0], splits[1])
 	if number_of_nodes(G) > 100:
 		pr = networkx.pagerank(G)
-		print(sorted(pr.items(), key=operator.itemgetter(1), reverse=True)[:1])
+		print(sorted(pr.items(), key=operator.itemgetter(1), reverse=True)[:3])
+		print("Number of nodes ", number_of_nodes(G))
