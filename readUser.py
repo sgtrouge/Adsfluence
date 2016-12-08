@@ -12,7 +12,6 @@ def find_user_data(filename):
 	splits[0] = splits[0][1:]
 	# For some reason the last one isn't built correctly, need to append ]]
 	splits[-1] = splits[-1][:-1] +']]'
-	count = 0
 	user_friends_map = {}
 	for js in splits:
 		jss = '{' + js + '}'
@@ -43,11 +42,11 @@ def add_file_data(filename):
 				edge_list.write(str(user)+' '+str(friend)+'\n')
 				count += 1
 	f.close()
-find_user_data('result_eric.csv')
-find_user_data('result_shane2.csv')
+find_user_data('result1.csv')
+find_user_data('result2.csv')
 # print all_user_id
-add_file_data('result_eric.csv')
-add_file_data('result_shane2.csv')
+add_file_data('result1.csv')
+add_file_data('result2.csv')
 print "number of nodes", len(list(all_user_id.keys()))
 print "number of edges", count
 edge_list.close()

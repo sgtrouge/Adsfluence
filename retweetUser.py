@@ -19,6 +19,7 @@ def find_user_data(filename):
 
 def add_file_data(filename):
 	global edge_list
+	global all_user_id
 	f = open(filename,'r')
 	data = f.read()
 	splits = data.split('}{')
@@ -43,7 +44,7 @@ def add_file_data(filename):
 	f.close()
 	print "total edges: ", count
 
-find_user_data('result_eric.csv')
-find_user_data('result_shane2.csv')
+find_user_data('result1.csv')
+find_user_data('result2.csv')
 add_file_data('resultBackup.txt')
 edge_list.close()
