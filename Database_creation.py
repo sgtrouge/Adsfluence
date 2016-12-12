@@ -6,7 +6,7 @@ import pandas as pd
 from django.utils.encoding import smart_str
 import pickle
 import csv
-w = open("tweet_info.csv", "w")
+w = open(".data/tweet_info.csv", "w")
 
 json_data = open("thanksgiving.txt",'r')
 
