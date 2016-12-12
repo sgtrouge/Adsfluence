@@ -5,7 +5,7 @@ from pprint import pprint
 from django.utils.encoding import smart_str
 import pickle
 import csv
-w = open("result_eric.csv", "w")
+w = open(".data/result_eric.csv", "w")
 
 # TODO: Integrate with a list of users to get follower graph.
 def oauth_req(url, key, secret, http_method="GET", post_body='', http_headers=None):
@@ -33,7 +33,7 @@ def oauth_req(url, key, secret, http_method="GET", post_body='', http_headers=No
 	return content
 
 
-json_data = open("result.txt",'r')
+json_data = open(".data/result.txt",'r')
 
 Total = ''
 Vector = []
