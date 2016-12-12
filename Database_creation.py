@@ -8,7 +8,7 @@ import pickle
 import csv
 w = open(".data/tweet_info.csv", "w")
 
-json_data = open("thanksgiving.txt",'r')
+json_data = open(".data/thanksgiving.txt",'r')
 
 Total = ''
 Vector = []
