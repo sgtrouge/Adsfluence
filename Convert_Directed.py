@@ -4,7 +4,7 @@ from scipy.sparse.linalg import eigs
 from statistics import median
 
 #Simple Example txt file with entries of an adjacency matrix, weights
-f = open('adjacency.txt')
+f = open('.data/adjacency.txt')
 
 #Initialize
 Row     = []
